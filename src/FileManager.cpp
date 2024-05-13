@@ -71,4 +71,3 @@ Graph FileManager::createGraphWithLabels(std::string csvName) {
     Graph toyGraph = Graph(size,edges);
     return toyGraph;
 }
-}
