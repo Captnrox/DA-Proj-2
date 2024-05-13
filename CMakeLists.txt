@@ -7,4 +7,6 @@ include_directories(src)
 
 add_executable(DA_Proj_2
         main.cpp
+        src/Graph.h
+        src/Graph.cpp
 )
