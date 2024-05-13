@@ -19,6 +19,9 @@ public:
     void toyGraph2Chosen();
     void toyGraph3Chosen();
 
+    int getDatasetChoice();
+    vector<string> getToyGraphVector();
+
     vector<string> filetoVector(string filename);
 
 };

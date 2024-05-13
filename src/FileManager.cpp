@@ -6,7 +6,7 @@ using namespace std;
 
 
 FileManager::FileManager() {
-
+    askForDataSet();
 }
 
 
@@ -85,4 +85,12 @@ vector<string> FileManager::filetoVector(std::string filename) {
         while(getline(ss, word, ',')) res.push_back(word);
     }
     return res;
+}
+
+int FileManager::getDatasetChoice() {
+    return _datasetChoice;
+}
+
+vector<string> FileManager::getToyGraphVector() {
+    return _toyGraphVector;
 }
