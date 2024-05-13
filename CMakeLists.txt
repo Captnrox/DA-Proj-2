@@ -7,9 +7,4 @@ include_directories(src)
 
 add_executable(DA_Proj_2
         main.cpp
-        src/FileManager.cpp
-        src/GraphManager.h
-        src/Node.cpp
-        src/EdgeClass.h
-        src/EdgeClass.cpp
-        src/GraphManager.cpp)
+)
