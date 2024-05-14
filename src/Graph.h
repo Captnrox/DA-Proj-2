@@ -10,6 +10,7 @@
 #include <vector>
 #include <limits>
 #include <cmath>
+#include <algorithm>
 
 
 using namespace std;
@@ -23,6 +24,9 @@ class Graph{
 public:
     Graph(int n, set<vector<string>> edges, unordered_map<unsigned int, pair<double, double>> coords = {});
     double getDist(int a, int b);
+    void kruskal();
+    void resetGraph();
+    //void dfs();
 };
 
 
