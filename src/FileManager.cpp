@@ -73,6 +73,7 @@ Graph FileManager::createGraphWithLabels(std::string csvName) {
     return toyGraph;
 }
 
+
 Graph FileManager::createComplexGraph(std::string csvNodes, std::string csvEdges) {
     unordered_map<unsigned int, pair<double, double>> coords;
     set<vector<string>> edges;
