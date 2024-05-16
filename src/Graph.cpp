@@ -84,3 +84,81 @@ void Graph::kruskal() {
 
 //void Graph::dfs();
 
+vector<int> Graph::christofides() {
+    kruskal();
+
+    vector<int> oddVertices;
+    for(int i = 0; i < size; i++){
+        if(adj[i].size()%2 != 0){
+            oddVertices.push_back(i);
+        }
+    }
+
+    vector<pair<int,int>> perfectMatching = minWeightMatching(oddVertices);
+
+    for(auto e: perfectMatching){
+        adj[e.first].push_back(e.second);
+        adj[e.second].push_back(e.first);
+    }
+
+    vector<int> circuit = eulerianCircuit();
+    vector<int> newCircuit;
+    vector<bool> visited(size, false);
+
+    for (auto &vertex : circuit) {
+        if (!visited[vertex]) {
+            newCircuit.push_back(vertex);
+            visited[vertex] = true;
+        }
+    }
+
+    //need to turn graph back to normal
+
+    return newCircuit;
+}
+
+vector<pair<int,int>> Graph::minWeightMatching(vector<int> oddVertices) {
+    vector<pair<int, int>> minWeightMatching;
+    while (!oddVertices.empty()) {
+        int v = oddVertices.back();
+        oddVertices.pop_back();
+        double shortest = numeric_limits<double>::max();
+        int shortestIndex = -1;
+        for (int i = 0; i < oddVertices.size(); i++) {
+            int u = oddVertices[i];
+            if (distances[v][u] < shortest) {
+                shortest = distances[v][u];
+                shortestIndex = i;
+            }
+        }
+        minWeightMatching.push_back(make_pair(v, oddVertices[shortestIndex]));
+        minWeightMatching.push_back(make_pair(oddVertices[shortestIndex], v));
+        oddVertices.erase(oddVertices.begin() + shortestIndex);
+    }
+    return minWeightMatching;
+}
+
+vector<int> Graph::eulerianCircuit() {
+    vector<int> circuit;
+    stack<int> stack;
+    stack.push(0);
+
+    while (!stack.empty()) {
+        int v = stack.top();
+        if (adj[v].empty()) {
+            circuit.push_back(v);
+            stack.pop();
+        } else {
+            int u = adj[v].back();
+            adj[v].pop_back();
+            for (int i = 0; i < adj[u].size(); i++) {
+                if (adj[u][i] == v) {
+                    adj[u].erase(adj[u].begin() + i);
+                    break;
+                }
+            }
+            stack.push(u);
+        }
+    }
+    return circuit;
+}

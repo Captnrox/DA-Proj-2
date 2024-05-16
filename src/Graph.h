@@ -11,6 +11,7 @@
 #include <limits>
 #include <cmath>
 #include <algorithm>
+#include <stack>
 
 
 using namespace std;
@@ -27,6 +28,9 @@ public:
     void kruskal();
     void resetGraph();
     //void dfs();
+    vector<int> christofides();
+    vector<pair<int,int>> minWeightMatching(vector<int> oddVertices);
+    vector<int> eulerianCircuit();
 };
 
 
