@@ -1,96 +1,137 @@
 #include "FileManager.h"
-#include <sstream>
-#include <fstream>
-#include <iostream>
-using namespace std;
 
+FileManager::FileManager() {};
 
-FileManager::FileManager() {
-    askForDataSet();
-}
-
-
-void FileManager::askForDataSet() {
-    cout << "What dataset would you like to build?" << endl
-         << "1. Toy Graphs" << endl
-         << "Please select an option (number): ";
-    string choice;
-    bool done = false;
-    while(!done){
-        cin >> choice;
-        if (choice == "1") {
-            askForToyGraph();
-            done = true;
-        } else {
-            cout << endl << "Please choose a possible answer" << endl;
-        }
-    }
-}
-
-void FileManager::askForToyGraph() {
-    int choice;
-    bool done = false;
-    cout << "What toy graph would you like to build?" << endl
-         << "1. Toy Graph 1" << endl
-         << "2. Toy Graph 2" << endl
-         << "3. Toy Graph 3" << endl
-         << "Please select an option (number): ";
-    while(!done){
-        cin>> choice;
-        if(choice == 1){
-            toyGraph1Chosen();
-            done = true;
-        } else if(choice == 2){
-            toyGraph2Chosen();
-            done = true;
-        } else if(choice == 3){
-            toyGraph3Chosen();
-            done = true;
-        } else {
-            cout << endl << "Please choose a possible answer" << endl;
-        }
-    }
-}
-
-
-void FileManager::toyGraph1Chosen() {
-    _toyGraphVector = filetoVector("../src/csv/Toy-Graphs/shipping.csv");
-}
-
-void FileManager::toyGraph2Chosen() {
-    _toyGraphVector = filetoVector("../src/csv/Toy-Graphs/stadiums.csv");
-}
-
-void FileManager::toyGraph3Chosen() {
-    _toyGraphVector = filetoVector("../src/csv/Toy-Graphs/tourism.csv");
-}
-
-/**
- * @brief Turns a file with the name given into a vector with all strings separated by commas and newliens as an iteration in it
- * @param filename
- * @return Returns a vector of strings with all the file content
- */
-vector<string> FileManager::filetoVector(std::string filename) {
-    vector<string> res;
-
+Graph FileManager::createSimpleGraph(std::string csvName) {
+    set<vector<string>> edges;
+    int size = 0;
     ifstream file;
-    file.open(filename);
+    string orig, dest, distance;
+    file.open(csvName);
     string line;
-    string word;
-    getline(file, line);
+    while (getline(file, line)) {
 
-    while(getline(file, line)){
-        stringstream ss(line);
+        std::istringstream iss(line);
+        std::string token;
+        std::vector<std::string> tokens;
 
-        while(getline(ss, word, ',')) res.push_back(word);
+        //split the line by commas and store each token
+        while (std::getline(iss, token, ',')) {
+            tokens.push_back(token);
+        }
+
+        //check if the line has at least three values
+        if (tokens.size() >= 3) {
+            orig = tokens[0];
+            dest = tokens[1];
+            distance = tokens[2];
+
+            size = max(size, max(stoi(orig), stoi(dest)));
+            edges.insert({orig,dest,distance});
+        }
     }
-    return res;
+    file.close();
+    size++;
+    Graph toyGraph = Graph(size,edges);
+    return toyGraph;
 }
 
-int FileManager::getDatasetChoice() {
-    return _datasetChoice;
+Graph FileManager::createGraphWithLabels(std::string csvName) {
+    // TODO: Map label to dis
+    set<vector<string>> edges;
+    int size = 0;
+    ifstream file;
+    string orig, dest, distance, labelA, labelB;
+    file.open(csvName);
+    string line;
+    while (getline(file, line)) {
+
+        std::istringstream iss(line);
+        std::string token;
+        std::vector<std::string> tokens;
+
+        //split the line by commas and store each token
+        while (std::getline(iss, token, ',')) {
+            tokens.push_back(token);
+        }
+
+        //check if the line has at least fixe values
+        if (tokens.size() >= 5) {
+            orig = tokens[0];
+            dest = tokens[1];
+            distance = tokens[2];
+            labelA = tokens[3];
+            labelB = tokens[4];
+
+            size = max(size, max(stoi(orig), stoi(dest)));
+            edges.insert({orig,dest,distance});
+        }
+    }
+    file.close();
+    size++;
+    Graph toyGraph = Graph(size,edges);
+    return toyGraph;
 }
 
-vector<string> FileManager::getToyGraphVector() {
-    return _toyGraphVector;
+
+Graph FileManager::createComplexGraph(std::string csvNodes, std::string csvEdges) {
+    unordered_map<unsigned int, pair<double, double>> coords;
+    set<vector<string>> edges;
+
+    int size = 0;
+    ifstream file,file2;
+    string id,lon,lat,orig,dest,distance;
+    string line;
+
+    file.open(csvNodes);
+    while (getline(file, line)) {
+
+        std::istringstream iss(line);
+        std::string token;
+        std::vector<std::string> tokens;
+
+        //split the line by commas and store each token
+        while (std::getline(iss, token, ',')) {
+            tokens.push_back(token);
+        }
+
+        //check if the line has at least fixe values
+        if (tokens.size() >= 3) {
+            id = tokens[0];
+            lon = tokens[1];
+            lat = tokens[2];
+
+            size = max(size,stoi(id));
+            coords[stoi(id)] = make_pair(stod(lon),stod(lat));
+        }
+    }
+    file.close();
+    size++;
+
+    file2.open(csvEdges);
+    while (getline(file2, line)) {
+
+        std::istringstream iss(line);
+        std::string token;
+        std::vector<std::string> tokens;
+
+        //split the line by commas and store each token
+        while (std::getline(iss, token, ',')) {
+            tokens.push_back(token);
+        }
+
+        //check if the line has at least fixe values
+        if (tokens.size() >= 3) {
+            orig = tokens[0];
+            dest = tokens[1];
+            distance = tokens[2];
+
+            edges.insert({orig,dest, distance});
+        }
+    }
+    file.close();
+
+    Graph graph = Graph(size, edges, coords);
+    return graph;
+
 }
