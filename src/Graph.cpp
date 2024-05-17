@@ -1,6 +1,7 @@
 #include "Graph.h"
 #include "UFDS.h"
 #include <stack>
+#include <chrono>
 
 Graph::Graph(int n, set<vector<std::string>> edges, unordered_map<unsigned int, pair<double, double>> coords): size(n), coords(coords){
 
@@ -71,6 +72,67 @@ void Graph::resetGraph(){
         visited[i] = false;
     }
 }
+
+/**
+ * @brief BackTracking algorithm for finding the best cost path in a graph
+ *  Makes use of an auxiliary recursive function
+ * @return void
+ */
+void Graph::backTracking() {
+    auto start = chrono::high_resolution_clock::now();
+
+    vector<int> currentTrip = {0};
+    double currentCost = 0;
+    vector<int> bestTrip;
+    double bestCost = numeric_limits<double>::max();
+
+    recBackTracking(currentTrip, currentCost, 0, bestTrip, bestCost);
+
+    auto end = std::chrono::high_resolution_clock::now();
+    chrono::duration<double> duration = end - start;
+
+    cout << "\nO melhor encontrado é: ";
+    for (int node = 0; node < bestTrip.size() -1; node++) {
+        cout << bestTrip[node] << "->";
+    }
+    cout << bestTrip[bestTrip.size()-1];
+    cout << "\nCom custo total de: " << bestCost;
+    cout << "\nNum tempo de: " << duration.count() << " segundos\n";
+}
+
+
+/**
+ * @brief Recursive auxiliary function for finding the best cost path
+ * @param currentTrip   Nodes visited for the curenth path
+ * @param currentCost   Cost of the current path being traversed
+ * @param currNode  Current node whose adjacents are being visisted
+ * @param bestTrip  Best path found so far
+ * @param bestCost  Cost of the best path found
+ */
+void Graph::recBackTracking(vector<int> &currentTrip, double &currentCost, int currNode, vector<int> &bestTrip, double &bestCost) {
+
+    if (currentTrip.size() == size && currNode == 0) {
+        if (currentCost < bestCost) {
+            bestTrip = currentTrip;
+            bestCost = currentCost;
+        }
+        return;
+    }
+
+    while (currentTrip.size() != size + 1 && currNode != 0) {
+        for (int next: adj[currNode]) {
+            if (find(currentTrip.begin(), currentTrip.end(), next) == currentTrip.end()) {
+                currentTrip.push_back(next);
+                currentCost += distances[currNode][next];
+                recBackTracking(currentTrip, currentCost, next, bestTrip, bestCost);
+                currentTrip.pop_back();
+                currentCost -= distances[currNode][next];
+            }
+        }
+    }
+}
+
+
 
 void Graph::kruskal() {
     UFDS ufds(size);

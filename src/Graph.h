@@ -30,6 +30,8 @@ public:
     void kruskal();
     void resetGraph();
     void dfs(int startNode, vector<int> *result);
+    void backTracking();
+    void recBackTracking(vector<int> &currentTrip, double &currentCost, int currNode, vector<int> &bestTrip, double &bestCost);
     double calculateTour(const vector<int> &path);
     vector<int> christofides();
     vector<pair<int,int>> minWeightMatching(vector<int> oddVertices);
