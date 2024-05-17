@@ -11,6 +11,8 @@
 #include <limits>
 #include <cmath>
 #include <algorithm>
+#include <stack>
+
 
 
 using namespace std;
@@ -29,7 +31,11 @@ public:
     void resetGraph();
     void dfs(int startNode, vector<int> *result);
     double calculateTour(const vector<int> &path);
+    vector<int> christofides();
+    vector<pair<int,int>> minWeightMatching(vector<int> oddVertices);
+    vector<int> eulerianCircuit();
 };
 
 
 #endif //DA_PROJ_2_GRAPH_H
+

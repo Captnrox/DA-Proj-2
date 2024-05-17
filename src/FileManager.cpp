@@ -133,5 +133,4 @@ Graph FileManager::createComplexGraph(std::string csvNodes, std::string csvEdges
 
     Graph graph = Graph(size, edges, coords);
     return graph;
-
 }
