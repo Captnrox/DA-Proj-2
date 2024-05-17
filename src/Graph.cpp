@@ -212,7 +212,8 @@ vector<int> Graph::christofides() {
         }
     }
 
-    //need to turn graph back to normal
+    resetGraph();
+
 
     return newCircuit;
 }
