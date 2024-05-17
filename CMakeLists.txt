@@ -13,5 +13,6 @@ add_executable(DA_Proj_2
         src/FileManager.cpp
         src/Graph.cpp
         src/app.cpp
-        src/UFDS.cpp)
+        src/UFDS.cpp
+        src/app.h)
 

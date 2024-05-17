@@ -1,4 +1,9 @@
-pp::App() {
+#include "app.h"
+#include <iostream>
+#include <string>
+using namespace std;
+
+App::App() {
     std::string choice = "1";
     do {
         if (check) {
@@ -41,7 +46,7 @@ pp::App() {
                 }
                 case '4':{
                     check = true;
-                    option 4;
+                    option = 4;
                     //func
                     break;
                 }
