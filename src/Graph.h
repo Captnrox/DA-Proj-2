@@ -24,9 +24,11 @@ class Graph{
 public:
     Graph(int n, set<vector<string>> edges, unordered_map<unsigned int, pair<double, double>> coords = {});
     double getDist(int a, int b);
+    void connectAllVertex();
     void kruskal();
     void resetGraph();
-    //void dfs();
+    void dfs(int startNode, vector<int> *result);
+    double calculateTour(const vector<int> &path);
 };
 
 
