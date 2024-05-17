@@ -27,6 +27,9 @@ public:
     void kruskal();
     void resetGraph();
     //void dfs();
+
+    void backTracking();
+    void recBackTracking(vector<int> &currentTrip, double &currentCost, int currNode, vector<int> &bestTrip, double &bestCost);
 };
 
 
