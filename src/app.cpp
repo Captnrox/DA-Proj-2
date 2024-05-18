@@ -4,6 +4,7 @@ int option = 0;
 bool check = true;
 FileManager fM;
 
+
 App::App() {
     std::string choice = "1";
     do {
@@ -48,7 +49,7 @@ App::App() {
                 case '4': {
                     check = true;
                     option = 4;
-                    OTH();
+                    pickRealGraph();
                     break;
                 }
                 default:
@@ -131,7 +132,7 @@ void App::OTH() {
                 case '1':
                     check = true;
                     option = option * 10 + 1;
-                    if((option/10)%10 == 2) triangulationToyGraphs();
+                    if((getFirstDigit(option)) == 2) triangulationToyGraphs();
                     else{
                         pickToyGraph();
                     }
@@ -181,17 +182,35 @@ void App::pickToyGraph() {
                     check = true;
                     break;
                 case '1': {
-
-                    break;
+                    check = true;
+                    Graph graph = fM.chooseGraph(0);
+                    if(getFirstDigit(option) == 1) {
+                        graph.backTracking();
+                    }
+                    else{
+                        graph.christofides();
+                    }
                 }
                 case '2': {
                     check = true;
-
+                    Graph graph = fM.chooseGraph(1);
+                    if(getFirstDigit(option) == 1) {
+                        graph.backTracking();
+                    }
+                    else{
+                        graph.christofides();
+                    }
                     break;
                 }
                 case '3': {
                     check = true;
-
+                    Graph graph = fM.chooseGraph(2);
+                    if(getFirstDigit(option) == 1) {
+                        graph.backTracking();
+                    }
+                    else{
+                        graph.christofides();
+                    }
                 }
                 default:
                     std::cout << "Insert a valid option\n\n";
@@ -224,12 +243,15 @@ void App::triangulationToyGraphs(){
                     check = true;
                     break;
                 case '1': {
-
+                    check = true;
+                    Graph graph = fM.chooseGraph(1);
+                    graph.triangularAproximation(false);
                     break;
                 }
                 case '2': {
                     check = true;
-
+                    Graph graph = fM.chooseGraph(2);
+                    graph.triangularAproximation(false);
                     break;
                 }
                 default:
@@ -253,7 +275,20 @@ void App::pickMediumGraph() {
             int lst[12] = {25, 50, 75, 100, 200, 300, 400, 500, 600, 700, 800, 900};
             if (std::find(std::begin(lst), std::end(lst), stoi(choice)) != std::end(lst)) {
                 check = true;
-                //do stuff here;
+                Graph graph = fM.chooseGraph(stoi(choice));
+                switch(getFirstDigit(option)){
+                    case 1:
+                        graph.backTracking();
+                        break;
+                    case 2:
+                        graph.triangularAproximation(false);
+                        break;
+                    case 3:
+                        graph.christofides();
+                        break;
+                    default:
+                        break;
+                }
                 std::cout << "\n\n";
                 do {
                     std::cout << "(0 to go back): ";
@@ -292,17 +327,56 @@ void App::pickRealGraph() {
                     check = true;
                     break;
                 case '1': {
-
+                    Graph graph = fM.chooseGraph(3);
+                    switch(getFirstDigit(option)){
+                        case 2:
+                            graph.triangularAproximation(true);
+                            break;
+                        case 3:;
+                            graph.christofides();
+                            break;
+                        case 4:
+                            //TODO: final heuristic;
+                            break;
+                        default:
+                            break;
+                    }
                     break;
                 }
                 case '2': {
                     check = true;
-
+                    Graph graph = fM.chooseGraph(4);
+                    switch(getFirstDigit(option)){
+                        case 2:
+                            graph.triangularAproximation(true);
+                            break;
+                        case 3:;
+                            graph.christofides();
+                            break;
+                        case 4:
+                            //TODO: final heuristic;
+                            break;
+                        default:
+                            break;
+                    }
                     break;
                 }
                 case '3': {
                     check = true;
-
+                    Graph graph = fM.chooseGraph(5);
+                    switch(getFirstDigit(option)){
+                        case 2:
+                            graph.triangularAproximation(true);
+                            break;
+                        case 3:;
+                            graph.christofides();
+                            break;
+                        case 4:
+                            //TODO: final heuristic;
+                            break;
+                        default:
+                            break;
+                    }
                 }
                 default:
                     std::cout << "Insert a valid option\n\n";
@@ -318,4 +392,18 @@ bool App::isNumber(std::string s) {
     int f;
     iss >> f;
     return iss.eof() && !iss.fail();
+}
+
+int App::getFirstDigit(int number) {
+    std::string numberStr = std::to_string(number);
+    char firstChar;
+
+    if (numberStr[0] == '-') {
+        firstChar = numberStr[1]; // Skip the negative sign
+    } else {
+        firstChar = numberStr[0];
+    }
+
+    int firstDigit = firstChar - '0';
+    return firstDigit;
 }

@@ -91,13 +91,13 @@ void Graph::backTracking() {
     auto end = std::chrono::high_resolution_clock::now();
     chrono::duration<double> duration = end - start;
 
-    cout << "\nO melhor encontrado é: ";
+    cout << "\nBest found path: ";
     for (int node = 0; node < bestTrip.size() -1; node++) {
-        cout << bestTrip[node] << "->";
+        cout << bestTrip[node] << " -> ";
     }
     cout << bestTrip[bestTrip.size()-1];
-    cout << "\nCom custo total de: " << bestCost;
-    cout << "\nNum tempo de: " << duration.count() << " segundos\n";
+    cout << "\nDistance: " << fixed << setprecision(2)<< bestCost <<endl ;
+    cout << "\nTime taken: " << duration.count() << "seconds" << " \n";
 }
 
 
@@ -177,9 +177,14 @@ void Graph::dfs(int startNode, vector<int> *result){
     }
 }
 
-double Graph::calculateTour(const vector<int> &path) {
+double Graph::calculateTour(const vector<int> path) {
     double distance = 0;
-    for (int i = 0; i < path.size() - 1; i++) distance += distances[path[i]][path[i + 1]];
+    cout << "Path: " << path[0] << " -> ";
+    for (int i = 0; i < path.size() - 2; i++){
+        cout << path[i +1] << " -> ";
+        distance += distances[path[i]][path[i + 1]];
+    }
+    cout << path[0] << "\n";
     distance += distances[path[path.size() - 1]][path[0]];
     return distance;
 }
@@ -262,4 +267,25 @@ vector<int> Graph::eulerianCircuit() {
         }
     }
     return circuit;
+}
+
+void Graph::triangularAproximation(bool realWorld){
+
+    auto start = chrono::high_resolution_clock::now();
+
+    vector<int> path;
+    if(realWorld){
+        connectAllVertex();
+    }
+    kruskal();
+    dfs(0,&path);
+    double totalDistance = calculateTour(path);
+
+    auto end = chrono::high_resolution_clock::now();
+    chrono::duration<double> duration = end - start;
+
+    cout << "Distance: " << fixed << setprecision(2) << totalDistance << endl;
+
+    cout << "Time take:" << fixed << setprecision(5) << duration.count() << "seconds" << endl;
+
 }
