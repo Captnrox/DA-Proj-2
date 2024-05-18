@@ -9,6 +9,7 @@ public:
     Graph createSimpleGraph(string csvName);
     Graph createGraphWithLabels(string csvName);
     Graph createComplexGraph(string csvNodes, string csvEdges);
+    Graph chooseGraph(int csv);
 };
 
 
