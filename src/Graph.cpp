@@ -189,7 +189,9 @@ double Graph::calculateTour(const vector<int> path) {
     return distance;
 }
 
-vector<int> Graph::christofides() {
+void Graph::christofides() {
+    auto start = chrono::high_resolution_clock::now();
+
     kruskal();
 
     vector<int> oddVertices;
@@ -219,8 +221,14 @@ vector<int> Graph::christofides() {
 
     resetGraph();
 
+    double totalDistance = calculateTour(newCircuit);
 
-    return newCircuit;
+    auto end = chrono::high_resolution_clock::now();
+    chrono::duration<double> duration = end - start;
+
+    cout << "Distance: " << fixed << setprecision(2) << totalDistance << endl;
+
+    cout << "Time take:" << fixed << setprecision(5) << duration.count() << "seconds" << endl;
 }
 
 vector<pair<int,int>> Graph::minWeightMatching(vector<int> oddVertices) {
