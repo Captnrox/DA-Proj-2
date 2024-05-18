@@ -189,6 +189,22 @@ double Graph::calculateTour(const vector<int> path) {
     return distance;
 }
 
+/**
+ * @brief Implements the Christofides algorithm for the Travelling Salesman Problem.
+ *
+ * The Christofides algorithm is an approximation algorithm for the Travelling Salesman Problem.
+ * It guarantees that the length of the tour is within 1.5 times the optimal.
+ *
+ * The algorithm works as follows:
+ * 1. Create a minimum spanning tree of the graph.
+ * 2. Find all vertices that have odd degree in the MST.
+ * 3. Find a minimum weight perfect matching of these vertices.
+ * 4. Combine the edges of the MST and the matching to form a multigraph.
+ * 5. Form an Eulerian circuit on this multigraph.
+ * 6. Make the circuit into a Hamiltonian circuit by skipping any vertex visited more than once.
+ *
+ * @return void
+ */
 void Graph::christofides() {
     auto start = chrono::high_resolution_clock::now();
 
@@ -231,6 +247,15 @@ void Graph::christofides() {
     cout << "Time take:" << fixed << setprecision(5) << duration.count() << "seconds" << endl;
 }
 
+/**
+ * @brief Finds a minimum weight perfect matching of the given vertices.
+ *
+ * A perfect matching is a matching where every vertex is connected to exactly one edge.
+ * The function iterates over all vertices and for each vertex, it finds the closest vertex that is not yet matched.
+ *
+ * @param oddVertices A vector of vertices with odd degree.
+ * @return A vector of pairs representing the edges of the matching.
+ */
 vector<pair<int,int>> Graph::minWeightMatching(vector<int> oddVertices) {
     vector<pair<int, int>> minWeightMatching;
     while (!oddVertices.empty()) {
@@ -252,6 +277,15 @@ vector<pair<int,int>> Graph::minWeightMatching(vector<int> oddVertices) {
     return minWeightMatching;
 }
 
+/**
+ * @brief Finds an Eulerian circuit in the graph.
+ *
+ * An Eulerian circuit is a circuit that visits every edge exactly once.
+ * The function uses a stack to keep track of the vertices. It starts from vertex 0 and while there are unvisited edges,
+ * it keeps adding vertices to the stack. When it reaches a vertex with no unvisited edges, it adds the vertex to the circuit.
+ *
+ * @return A vector representing the Eulerian circuit.
+ */
 vector<int> Graph::eulerianCircuit() {
     vector<int> circuit;
     stack<int> stack;
