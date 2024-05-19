@@ -34,7 +34,7 @@ public:
     void backTracking();
     void recBackTracking(vector<int> &currentTrip, double &currentCost, int currNode, vector<int> &bestTrip, double &bestCost);
     double calculateTour(vector<int> path);
-    void christofides();
+    void christofides(int startIndex = 0);
     vector<pair<int,int>> minWeightMatching(vector<int> oddVertices);
     vector<int> eulerianCircuit();
     void triangularAproximation(bool realWorld);
