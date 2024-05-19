@@ -430,8 +430,8 @@ void Graph::extraHeuristic(int node){
             return;
         }
     }
-    //TODO: pass an int to tell what node to start in ps: its the node in this function
-    christofides();
+
+    christofides(node);
 
     auto end = chrono::high_resolution_clock::now();
     chrono::duration<double> duration = end - start;
