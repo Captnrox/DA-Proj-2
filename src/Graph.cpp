@@ -61,6 +61,7 @@ double haversine(double lat1, double lon1, double lat2, double lon2) {
     return earthRadius * c;
 }
 /**
+ *  Time Complexity: O(n^2), where n is the number of vertices in the graph.
  *  @brief Connects all vertexes, by setting their distance to something other than infinite using the haversine method
  */
 void Graph::connectAllVertex() {
@@ -158,6 +159,7 @@ void Graph::recBackTracking(vector<int> &currentTrip, double &currentCost, int c
 
 /**
  * @brief Uses the kruskal algorithm to create an mst
+ * Time Complexity: O(ElogE), where E is the number of edges in the graph.
  */
 void Graph::kruskal() {
     UFDS ufds(size);
@@ -235,7 +237,7 @@ double Graph::calculateTour(const vector<int> path) {
  * 4. Combine the edges of the MST and the matching to form a multigraph.
  * 5. Form an Eulerian circuit on this multigraph.
  * 6. Make the circuit into a Hamiltonian circuit by skipping any vertex visited more than once.
- *
+ *  Time Complexity: O(n^3), where n is the number of vertices in the graph.
  * @return void
  */
 void Graph::christofides(int startIndex) {
@@ -289,7 +291,8 @@ void Graph::christofides(int startIndex) {
  *
  * A perfect matching is a matching where every vertex is connected to exactly one edge.
  * The function iterates over all vertices and for each vertex, it finds the closest vertex that is not yet matched.
- *
+ * Time Complexity: O(n^2), where n is the number of vertices in the graph.
+
  * @param oddVertices A vector of vertices with odd degree.
  * @return A vector of pairs representing the edges of the matching.
  */
@@ -320,7 +323,7 @@ vector<pair<int,int>> Graph::minWeightMatching(vector<int> oddVertices) {
  * An Eulerian circuit is a circuit that visits every edge exactly once.
  * The function uses a stack to keep track of the vertices. It starts from vertex 0 and while there are unvisited edges,
  * it keeps adding vertices to the stack. When it reaches a vertex with no unvisited edges, it adds the vertex to the circuit.
- *
+ * Time Complexity: O(n + E), where n is the number of vertices and E is the number of edges in the graph.
  * @return A vector representing the Eulerian circuit.
  */
 vector<int> Graph::eulerianCircuit() {
@@ -357,6 +360,8 @@ vector<int> Graph::eulerianCircuit() {
  * 3.Knowing the graph is fully connected and that the rule of triangular inequality guarantees that going from one node to another
  * is always better than going back, connect all nodes in order
  * 4.Calculate the size of the path
+ *
+ * Time Complexity: O(n^2), where n is the number of vertices in the graph.
  * @param realWorld Boolean used to determine if some distances have to be calculated using haversine or not
  */
 void Graph::triangularAproximation(bool realWorld){
@@ -381,6 +386,7 @@ void Graph::triangularAproximation(bool realWorld){
 }
 /**
  * @brief Builds the adjacency list of a graph based on the distances being available or not, helpful for bfs and dfs
+ * Time Complexity: O(n^2), where n is the number of vertices in the graph.
  */
 void Graph::buildAdjacencyList() {
     adj.resize(size);
@@ -395,6 +401,7 @@ void Graph::buildAdjacencyList() {
 /**
  * @brief Runs over the adjacency list and visits all nodes to verify if they are all connected
  * @param startNode Starting node for the bfs
+ * Time Complexity: O(n + E), where n is the number of vertices and E is the number of edges in the graph.
  */
 void Graph::bfs(int startNode) {
     visited.assign(size, false);
@@ -417,6 +424,7 @@ void Graph::bfs(int startNode) {
 
 /**
  * Applies the heuristic used on 4.3, christofides, after checking if it is possible to connect all vertices through the bfs
+ * Time Complexity: O(n^3), where n is the number of vertices in the graph.
  * @param node
  */
 void Graph::extraHeuristic(int node){
