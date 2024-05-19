@@ -111,6 +111,7 @@ void Graph::backTracking() {
     vector<int> bestTrip = {};
     double currentCost = 0.0;
     double bestCost = numeric_limits<double>::max();
+    long limit = tgamma(size)/2;
 
     auto start = chrono::high_resolution_clock::now();
 
@@ -123,6 +124,8 @@ void Graph::backTracking() {
         cout << "Error, empty trip\n";
         return;
     }
+    if (iterations > limit) cout << "Error: excessive iterations\n";
+
     cout << "\nBest found path: ";
     for (int node = 0; node < bestTrip.size() -1; node++) {
         cout << bestTrip[node] << " -> ";
@@ -144,10 +147,7 @@ void Graph::backTracking() {
 void Graph::recBackTracking(vector<int> &bestTrip, double &bestCost, int currentNode, vector<int> &currentTrip, double &currentCost, long &iterations) {
 
     if (currentTrip.size() == (size +1) && currentNode == 0) {
-        if (iterations > tgamma(size)/2) {
-            cout << "Error: Excessive iterations";
-            return;
-        }
+        if (iterations > tgamma(size)/2) {            return;        }
         iterations++;
         if (currentCost < bestCost) {
             bestTrip = currentTrip;
