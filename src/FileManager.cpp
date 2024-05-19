@@ -3,7 +3,7 @@
 FileManager::FileManager() {};
 
 Graph FileManager::createSimpleGraph(std::string csvName) {
-3    set<vector<string>> edges;
+    set<vector<string>> edges;
     int size = 0;
     ifstream file;
     string orig, dest, distance;
@@ -86,6 +86,7 @@ Graph FileManager::createComplexGraph(std::string csvNodes, std::string csvEdges
     string line;
 
     file.open(csvNodes);
+    getline(file, line);
     while (getline(file, line)) {
 
         std::istringstream iss(line);
