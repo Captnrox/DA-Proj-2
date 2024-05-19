@@ -238,7 +238,7 @@ double Graph::calculateTour(const vector<int> path) {
  *
  * @return void
  */
-void Graph::christofides() {
+void Graph::christofides(int startIndex = 0) {
     auto start = chrono::high_resolution_clock::now();
 
     kruskal();
@@ -260,6 +260,10 @@ void Graph::christofides() {
     vector<int> circuit = eulerianCircuit();
     vector<int> newCircuit;
     vector<bool> visited(size, false);
+
+    auto it = find(circuit.begin(), circuit.end(), startIndex);
+    
+    rotate(circuit.begin(), it, circuit.end());
 
     for (auto &vertex : circuit) {
         if (!visited[vertex]) {
