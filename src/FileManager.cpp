@@ -112,6 +112,7 @@ Graph FileManager::createComplexGraph(std::string csvNodes, std::string csvEdges
     size++;
 
     file2.open(csvEdges);
+    getline(file2, line);
     while (getline(file2, line)) {
 
         std::istringstream iss(line);
