@@ -190,6 +190,7 @@ void App::pickToyGraph() {
                     else{
                         graph.christofides();
                     }
+                    break;
                 }
                 case '2': {
                     check = true;
@@ -211,6 +212,7 @@ void App::pickToyGraph() {
                     else{
                         graph.christofides();
                     }
+                    break;
                 }
                 default:
                     std::cout << "Insert a valid option\n\n";
@@ -267,7 +269,7 @@ void App::triangulationToyGraphs(){
 void App::pickMediumGraph() {
     std::string choice = "1";
     do {
-        std::cout << "Insert the number of nodes you what the graph to have (0 to go back): ";
+        std::cout << "Insert the number of nodes you want the graph to have (0 to go back): ";
         std::getline(std::cin, choice);
         std::cout << "\n";
         if (choice.length() == 1 && choice[0] == '0') check = true;
@@ -298,7 +300,7 @@ void App::pickMediumGraph() {
                 break;
             } else
                 std::cout
-                        << "Graph with that amount of nodes doesn't exist, try any of the following: 25, 50, 75, 100, 200, 300, 400, 500, 600, 700, 800 or 900\n\n";
+                        << "A graph with that amount of nodes doesn't exist, try any of the following: 25, 50, 75, 100, 200, 300, 400, 500, 600, 700, 800 or 900\n\n";
         } else std::cout << "Insert a number\n\n";
     } while (choice != "0");
 }

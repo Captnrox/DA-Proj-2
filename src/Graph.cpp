@@ -96,24 +96,32 @@ void Graph::resetGraph(){
     }
 }
 
+
 /**
  * @brief BackTracking algorithm for finding the best cost path in a graph
  *  Makes use of an auxiliary recursive function
  * @return void
  */
 void Graph::backTracking() {
-    auto start = chrono::high_resolution_clock::now();
+    buildAdjacencyList();
 
+    long iterations = 0;
     vector<int> currentTrip = {0};
-    double currentCost = 0;
-    vector<int> bestTrip;
+    vector<int> bestTrip = {};
+    double currentCost = 0.0;
     double bestCost = numeric_limits<double>::max();
 
-    recBackTracking(currentTrip, currentCost, 0, bestTrip, bestCost);
+    auto start = chrono::high_resolution_clock::now();
+
+    recBackTracking(bestTrip, bestCost, 0, currentTrip, currentCost, iterations);
 
     auto end = std::chrono::high_resolution_clock::now();
     chrono::duration<double> duration = end - start;
 
+    if (bestTrip.empty()) {
+        cout << "Error, empty trip\n";
+        return;
+    }
     cout << "\nBest found path: ";
     for (int node = 0; node < bestTrip.size() -1; node++) {
         cout << bestTrip[node] << " -> ";
@@ -126,15 +134,20 @@ void Graph::backTracking() {
 
 /**
  * @brief Recursive auxiliary function for finding the best cost path
- * @param currentTrip   Nodes visited for the curenth path
- * @param currentCost   Cost of the current path being traversed
- * @param currNode  Current node whose adjacents are being visisted
  * @param bestTrip  Best path found so far
  * @param bestCost  Cost of the best path found
+ * @param currentTrip   Nodes visited for the curenth path
+ * @param currentCost   Cost of the current path being traversed
+ * @param currentNode  Current node whose adjacents are being visisted
  */
-void Graph::recBackTracking(vector<int> &currentTrip, double &currentCost, int currNode, vector<int> &bestTrip, double &bestCost) {
+void Graph::recBackTracking(vector<int> &bestTrip, double &bestCost, int currentNode, vector<int> &currentTrip, double &currentCost, long &iterations) {
 
-    if (currentTrip.size() == size && currNode == 0) {
+    if (currentTrip.size() == (size +1) && currentNode == 0) {
+        if (iterations > tgamma(size)/2) {
+            cout << "Error: Excessive iterations";
+            return;
+        }
+        iterations++;
         if (currentCost < bestCost) {
             bestTrip = currentTrip;
             bestCost = currentCost;
@@ -142,16 +155,17 @@ void Graph::recBackTracking(vector<int> &currentTrip, double &currentCost, int c
         return;
     }
 
-    while (currentTrip.size() != size + 1 && currNode != 0) {
-        for (int next: adj[currNode]) {
-            if (find(currentTrip.begin(), currentTrip.end(), next) == currentTrip.end()) {
-                currentTrip.push_back(next);
-                currentCost += distances[currNode][next];
-                recBackTracking(currentTrip, currentCost, next, bestTrip, bestCost);
-                currentTrip.pop_back();
-                currentCost -= distances[currNode][next];
-            }
+    //Traverse all possible paths starting a currentNode
+    for (int next: adj[currentNode]) {
+        if ((next == 0 && currentTrip.size() == size) || find(currentTrip.begin(), currentTrip.end(), next) == currentTrip.end()) {
+            currentTrip.push_back(next);
+            double nextCost = currentCost + distances[currentNode][next];
+//currentCost += distances[currentNode][next];
+            recBackTracking(bestTrip, bestCost, next, currentTrip, nextCost, iterations);
+            currentTrip.pop_back();
+//currentCost -= distances[currentNode][next];
         }
+        else continue;
     }
 }
 

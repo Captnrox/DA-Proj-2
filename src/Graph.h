@@ -33,7 +33,7 @@ public:
     void resetGraph();
     void dfs(int startNode, vector<int> *result);
     void backTracking();
-    void recBackTracking(vector<int> &currentTrip, double &currentCost, int currNode, vector<int> &bestTrip, double &bestCost);
+    void recBackTracking(vector<int> &bestTrip, double &bestCost, int currentNode, vector<int> &currentTrip, double &currentCost, long &iterations);
     double calculateTour(vector<int> path);
     void christofides(int startIndex = 0);
     vector<pair<int,int>> minWeightMatching(vector<int> oddVertices);
