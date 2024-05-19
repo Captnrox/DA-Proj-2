@@ -305,6 +305,7 @@ void App::pickMediumGraph() {
 
 void App::pickRealGraph() {
     string choice = "1";
+    int node;
     do {
         if (check) {
             std::cout << "+--------------------------------+\n"
@@ -336,7 +337,9 @@ void App::pickRealGraph() {
                             graph.christofides();
                             break;
                         case 4:
-                            //TODO: final heuristic;
+                            cout << "Please pick the node you want to start at:" << endl;
+                            cin >> node;
+                            graph.extraHeuristic(node);
                             break;
                         default:
                             break;
@@ -354,7 +357,9 @@ void App::pickRealGraph() {
                             graph.christofides();
                             break;
                         case 4:
-                            //TODO: final heuristic;
+                            cout << "Please pick the node you want to start at:" << endl;
+                            cin >> node;
+                            graph.extraHeuristic(node);
                             break;
                         default:
                             break;
@@ -372,7 +377,9 @@ void App::pickRealGraph() {
                             graph.christofides();
                             break;
                         case 4:
-                            //TODO: final heuristic;
+                            cout << "Please pick the node you want to start at:" << endl;
+                            cin >> node;
+                            graph.extraHeuristic(node);
                             break;
                         default:
                             break;

@@ -13,6 +13,7 @@
 #include <cmath>
 #include <algorithm>
 #include <stack>
+#include <queue>
 
 
 
@@ -38,6 +39,9 @@ public:
     vector<pair<int,int>> minWeightMatching(vector<int> oddVertices);
     vector<int> eulerianCircuit();
     void triangularAproximation(bool realWorld);
+    void buildAdjacencyList();
+    void bfs(int startNode);
+    void extraHeuristic(int node);
 };
 
 

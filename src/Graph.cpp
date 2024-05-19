@@ -3,6 +3,7 @@
 #include <stack>
 #include <chrono>
 
+
 Graph::Graph(int n, set<vector<std::string>> edges, unordered_map<unsigned int, pair<double, double>> coords): size(n), coords(coords){
 
     //criar array de arrays (matriz dupla de adjacencia para distancias)
@@ -32,11 +33,23 @@ Graph::Graph(int n, set<vector<std::string>> edges, unordered_map<unsigned int, 
     }
 
 }
-
+/**
+ * @brief Converts and angle from degrees to radians
+ * @param angle Angle to convert
+ * @return Returns the angle in radians
+ */
 double converToRadians(double angle){
     return angle * M_PI/180;
 }
 
+/**
+ * @brief Calculates the distance between two points given their latitude and longitude
+ * @param lat1 Latitude of the first point
+ * @param lon1 Longitude of the first point
+ * @param lat2 Latitude of the second point
+ * @param lon2 Longitude of the second point
+ * @return The distance between two points
+ */
 double haversine(double lat1, double lon1, double lat2, double lon2) {
     double deltaLat = converToRadians(lat2 - lat1);
     double deltaLon = converToRadians(lon2 - lon1);
@@ -47,7 +60,9 @@ double haversine(double lat1, double lon1, double lat2, double lon2) {
     double c = 2.0 * atan2(sqrt(a), sqrt(1.0-a));
     return earthRadius * c;
 }
-
+/**
+ *  @brief Connects all vertexes, by setting their distance to something other than infinite using the haversine method
+ */
 void Graph::connectAllVertex() {
     double length = 0;
     for (int i = 0; i < size; i++) {
@@ -61,10 +76,18 @@ void Graph::connectAllVertex() {
     }
 }
 
+/**
+ * @brief Gets the distance of two points
+ * @param a First point
+ * @param b Second point
+ * @return The distance between two points
+ */
 double Graph::getDist(int a, int b) {
     return distances[a][b];
 }
-
+/**
+ * @brief resets the adjacency list and the visited list of nodes for the graph
+ */
 void Graph::resetGraph(){
     vector<int> vector;
     for (int i = 0; i < size; i++){
@@ -133,7 +156,9 @@ void Graph::recBackTracking(vector<int> &currentTrip, double &currentCost, int c
 }
 
 
-
+/**
+ * @brief Uses the kruskal algorithm to create an mst
+ */
 void Graph::kruskal() {
     UFDS ufds(size);
     vector< pair <pair<int, int>, double>> edges;
@@ -166,6 +191,9 @@ void Graph::kruskal() {
     }
 }
 
+/**
+ * @brief Algorithm used to iterate over the adjacency matrix
+ **/
 void Graph::dfs(int startNode, vector<int> *result){
     visited[startNode] = true;
     result->push_back(startNode);
@@ -177,6 +205,11 @@ void Graph::dfs(int startNode, vector<int> *result){
     }
 }
 
+/**
+ * @brief Calculates the total distance of a TSP path
+ * @param path List of ordered nodes that represent the order of nodes to visit
+ * @return Returns total distance of the path
+ */
 double Graph::calculateTour(const vector<int> path) {
     double distance = 0;
     cout << "Path: " << path[0] << " -> ";
@@ -310,7 +343,18 @@ vector<int> Graph::eulerianCircuit() {
     }
     return circuit;
 }
-
+/**
+ * @brief Finds a TSP path that visits all the nodes of the graph exactly once
+ *
+ * This is an algorithm is an approximation algorithm for the Travelling Salesman Problem, and works as follows;
+ *
+ * 1.Create an mst with the nodes of the graph
+ * 2.Run over the mst using a dfs and set a path of nodes to follow
+ * 3.Knowing the graph is fully connected and that the rule of triangular inequality guarantees that going from one node to another
+ * is always better than going back, connect all nodes in order
+ * 4.Calculate the size of the path
+ * @param realWorld Boolean used to determine if some distances have to be calculated using haversine or not
+ */
 void Graph::triangularAproximation(bool realWorld){
 
     auto start = chrono::high_resolution_clock::now();
@@ -329,5 +373,65 @@ void Graph::triangularAproximation(bool realWorld){
     cout << "Distance: " << fixed << setprecision(2) << totalDistance << endl;
 
     cout << "Time take:" << fixed << setprecision(5) << duration.count() << "seconds" << endl;
+
+}
+/**
+ * @brief Builds the adjacency list of a graph based on the distances being available or not, helpful for bfs and dfs
+ */
+void Graph::buildAdjacencyList() {
+    adj.resize(size);
+    for (int i = 0; i < size; ++i) {
+        for (int j = 0; j < size; ++j) {
+            if (distances[i][j] != numeric_limits<double>::max()) {
+                adj[i].push_back(j);
+            }
+        }
+    }
+}
+/**
+ * @brief Runs over the adjacency list and visits all nodes to verify if they are all connected
+ * @param startNode Starting node for the bfs
+ */
+void Graph::bfs(int startNode) {
+    visited.assign(size, false);
+    queue<int> q;
+    q.push(startNode);
+    visited[startNode] = true;
+
+    while (!q.empty()) {
+        int node = q.front();
+        q.pop();
+
+        for (int neighbor : adj[node]) {
+            if (!visited[neighbor]) {
+                q.push(neighbor);
+                visited[neighbor] = true;
+            }
+        }
+    }
+}
+
+/**
+ * Applies the heuristic used on 4.3, christofides, after checking if it is possible to connect all vertices through the bfs
+ * @param node
+ */
+void Graph::extraHeuristic(int node){
+    auto start = chrono::high_resolution_clock::now();
+
+    buildAdjacencyList();
+    bfs(node);
+    for(bool visit: visited){
+        if(!visit){
+            cout << "Not possible to have a path through all nodes";
+            return;
+        }
+    }
+    //TODO: pass an int to tell what node to start in ps: its the node in this function
+    christofides();
+
+    auto end = chrono::high_resolution_clock::now();
+    chrono::duration<double> duration = end - start;
+
+    cout << "Total time take:" << fixed << setprecision(5) << duration.count() << "seconds" << endl;
 
 }
