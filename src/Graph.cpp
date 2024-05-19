@@ -235,7 +235,7 @@ double Graph::calculateTour(const vector<int> path) {
  * 2. Find all vertices that have odd degree in the MST.
  * 3. Find a minimum weight perfect matching of these vertices.
  * 4. Combine the edges of the MST and the matching to form a multigraph.
- * 5. Form an Eulerian circuit on this multigraph.
+ * 5. Form an Eulerian circuit on this graph.
  * 6. Make the circuit into a Hamiltonian circuit by skipping any vertex visited more than once.
  *  Time Complexity: O(n^3), where n is the number of vertices in the graph.
  * @return void

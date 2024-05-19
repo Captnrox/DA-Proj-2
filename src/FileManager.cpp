@@ -38,7 +38,6 @@ Graph FileManager::createSimpleGraph(std::string csvName) {
 }
 
 Graph FileManager::createGraphWithLabels(std::string csvName) {
-    // TODO: Map label to dis
     set<vector<string>> edges;
     int size = 0;
     ifstream file;
